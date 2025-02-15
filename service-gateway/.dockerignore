@@ -1,0 +1,27 @@
+# Ignore the build directory (contains compiled binaries and intermediate files)
+build/
+
+# Ignore object files and libraries
+*.o
+*.obj
+*.so
+*.a
+
+# Ignore compiled executables (if built locally)
+*.exe
+*.out
+
+# Ignore temporary and log files
+*.tmp
+*.log
+
+# Ignore OS-specific files
+.DS_Store
+
+# Ignore Git metadata
+.git
+.gitignore
+
+# Ignore IDE/editor configuration files and folders
+.vscode
+.idea

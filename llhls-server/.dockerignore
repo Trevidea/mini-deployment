@@ -1,0 +1,25 @@
+# Exclude node_modules since dependencies will be installed during the Docker build
+node_modules
+
+# Exclude log files
+*.log
+npm-debug.log*
+yarn-debug.log*
+
+# Exclude build output directories (adjust these as needed)
+dist
+build
+
+# Exclude temporary files and folders
+tmp
+temp
+
+# Exclude OS-specific files
+.DS_Store
+
+# Exclude Git metadata
+.git
+.gitignore
+
+# Exclude environment variables files if not needed during build
+.env

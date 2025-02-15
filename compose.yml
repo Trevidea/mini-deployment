@@ -3,7 +3,7 @@ version: '3.8'
 services:
   # ✅ Service Gateway
   service-gateway:
-    image: drakesoftware/service-gateway:image
+    image: drakesoftware/service-gateway:latest
     container_name: service-gateway
     ports:
       - "1437:1437"
@@ -17,20 +17,18 @@ services:
       PG_USR: "drake_8283"
       PG_PWD: "sportpip"
       PG_PORT: 5432
-      OM_URL: http://ovenmediaengine:8081/v1
+      OM_URL: http://ome:8081/v1
       OM_HOST_NAME: localhost
       OM_CTRL_SVR: service-gateway:1437
     networks:
       - private
-      - public
     depends_on:
       - postgres
+    restart: unless-stopped
 
-  # ✅ PostgreSQL Database
+  # ✅ PostgreSQL Database (now using sp-db image)
   postgres:
-    image: drakesoftware/postgres:latest
-    ports:
-      - "5432:5432"
+    image: drakesoftware/sp-db:latest
     environment:
       POSTGRES_DB: half-stack
       POSTGRES_USER: drake_8283
@@ -42,22 +40,21 @@ services:
 
   # ✅ Relay Server
   relay-server:
-    image: drakesoftware/relay-server:image
+    image: drakesoftware/relay-server:latest
     container_name: relay-server
-    ports:
-      - "3001:3001"
-      - "4001:4001"
+    # ports:
+    #   - "3001:3001"
+    #   - "4001:4001"
     volumes:
       - relay-config:/etc/relay-server
       - relay-server-logs:/var/log/relay-server
     restart: unless-stopped
     networks:
       - private
-      - public
 
   # ✅ OvenMediaEngine (OME) Streaming Server
   ovenmediaengine:
-    image: drakesoftware/ovenmediaengine:image
+    image: drakesoftware/ome:latest
     ports:
       - "8081:8081"
       - "1935:1935"
@@ -68,14 +65,13 @@ services:
       - ome-media:/opt/ovenmediaengine/media
     networks:
       - private
-      - public
     environment:
       - OME_HOST_IP=0.0.0.0
     restart: unless-stopped
 
   # ✅ Angular Frontend Application
   angular-app:
-    image: drakesoftware/full-stack-ui:image
+    image: drakesoftware/full-stack-ui:latest
     container_name: full-stack-ui
     ports:
       - "4400:4400"
@@ -84,26 +80,24 @@ services:
     restart: always
     networks:
       - private
-      - public
 
   # ✅ Low Latency HLS (LLHLS) Server
   llhls-server:
-    image: drakesoftware/llhls-server:image
+    image: drakesoftware/llhls-server:latest
     container_name: llhls-server
     ports:
-      - "59919:59919" # ✅ Ensure it's mapped to 59919 inside the container
+      - "59919:59919" # Ensure it's mapped to 59919 inside the container
     volumes:
-      - ome-media:/usr/share/nginx/html/hls # ✅ Serve OME HLS dumps
+      - ome-media:/usr/share/nginx/html/hls # Serve OME HLS dumps
     networks:
       - private
-      - public
     depends_on:
-      - ovenmediaengine # ✅ Ensure OME starts first
+      - ovenmediaengine # Ensure OME starts first
     restart: unless-stopped
 
-  # ✅ **IPAD-UIp**
+  # ✅ IPAD-UIp (now using tagging-app image)
   ipad-ui:
-    image: drakesoftware/ipad-ui:image
+    image: drakesoftware/tagging-app:latest
     container_name: ipad-ui
     ports:
       - "4300:4300"
@@ -111,12 +105,11 @@ services:
       - coach_app_config:/etc/nginx/conf.d:ro
     restart: always
     networks:
-      - private # ✅ Ensures it can communicate with other services
-      - public
+      - private
 
   # ✅ Mobile App
   tagging-app:
-    image: drakesoftware/tagging-app:image
+    image: drakesoftware/tagging-app:latest
     container_name: tagging-app
     ports:
       - "4600:4600"
@@ -124,14 +117,11 @@ services:
       - mobile_app_conf:/etc/nginx/conf.d:ro
     restart: always
     networks:
-      - private # ✅ Ensures it can communicate with other services
-      - public
+      - private
 
 # ✅ Network Configuration
 networks:
   private:
-    driver: bridge
-  public:
     driver: bridge
 
 # ✅ Volumes
