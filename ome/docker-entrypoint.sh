@@ -2,7 +2,7 @@
 set -e
 
 CONFIG_DIR="/opt/ovenmediaengine/bin/conf"
-MEDIA_DIR="/opt/ovenmediaengine/media"
+MEDIA_DIR="/opt/ovenmediaengine/bin/dumps"
 LOGS_DIR="/var/log/ovenmediaengine"
 CERTS_DIR="/opt/ovenmediaengine/certs"
 

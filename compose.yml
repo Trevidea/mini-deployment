@@ -61,8 +61,7 @@ services:
       - "3333:3333"
       - "3334:3334"
     volumes:
-      - shared-data:/opt/ovenmediaengine
-      - ome-media:/opt/ovenmediaengine/media
+      - ome-media:/opt/ovenmediaengine/bin/dumps
     networks:
       - private
     environment:
@@ -135,7 +134,6 @@ volumes:
     driver: local
   angular_app_config:
     driver: local
-  shared-data:
   ome-media:
   coach_app_config:
     driver: local
