@@ -11,13 +11,13 @@ services:
       - /usr/share/ovenmediaengine/dumps:/app/dumps
       - service-gateway-logs:/app/logs
     environment:
-      TZ: Asia/Kolkata
+      TZ: America/New_York
       PG_SRV: postgres
       PG_DBS: half-stack
       PG_USR: "drake_8283"
       PG_PWD: "sportpip"
       PG_PORT: 5432
-      OM_URL: http://ome:8081/v1
+      OM_URL: http://ovenmediaengine:8081/v1
       OM_HOST_NAME: localhost
       OM_CTRL_SVR: service-gateway:1437
     networks:
@@ -42,9 +42,9 @@ services:
   relay-server:
     image: drakesoftware/relay-server:latest
     container_name: relay-server
-    # ports:
-    #   - "3001:3001"
-    #   - "4001:4001"
+    ports:
+      - "3001:3001"
+      - "4001:4001"
     volumes:
       - relay-config:/etc/relay-server
       - relay-server-logs:/var/log/relay-server
