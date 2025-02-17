@@ -9,7 +9,8 @@ services:
       - /usr/share/ovenmediaengine/dumps:/app/dumps
       - service-gateway-logs:/app/logs
     environment:
-      TZ: America/New_York
+      TZ: Asia/Kolkata
+      # TZ: America/New_York
       PG_SRV: postgres
       PG_DBS: half-stack
       PG_USR: "drake_8283"
