@@ -95,7 +95,7 @@ services:
 
   # ✅ IPAD-UIp (now using tagging-app image)
   ipad-ui:
-    image: drakesoftware/tagging-app:latest
+    image: drakesoftware/sp-coach-app:latest
     container_name: ipad-ui
     ports:
       - "4300:4300"
