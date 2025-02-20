@@ -8,7 +8,7 @@ services:
     ports:
       - "1437:1437"
     volumes:
-      - /usr/share/ovenmediaengine/dumps:/app/dumps
+      - ome-media:/app/dumps
       - service-gateway-logs:/app/logs
     environment:
       TZ: America/New_York
@@ -20,6 +20,7 @@ services:
       OM_URL: http://ovenmediaengine:8081/v1
       OM_HOST_NAME: sp-mini.pro
       OM_CTRL_SVR: service-gateway:1437
+      OM_DUMPS: /app/dumps
     networks:
       - private
     depends_on:
