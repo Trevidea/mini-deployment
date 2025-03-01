@@ -1,7 +1,7 @@
 services:
   # ✅ Service Gateway
   service-gateway:
-    image: service-gateway:latest
+    image: drakesoftware/service-gateway:latest
     container_name: service-gateway
     ports:
       - "1437:1437"
@@ -31,7 +31,7 @@ services:
 
   # ✅ PostgreSQL Database (now using sp-db image)
   postgres:
-    image: sp-db:latest
+    image: drakesoftware/sp-db:latest
     environment:
       POSTGRES_DB: half-stack
       PG_USR_FILE: /run/secrets/pg_user
@@ -46,7 +46,7 @@ services:
 
   # ✅ Relay Server
   relay-server:
-    image: relay-server:latest
+    image: drakesoftware/relay-server:latest
     container_name: relay-server
     ports:
       - "3001:3001"
@@ -60,7 +60,7 @@ services:
 
   # ✅ OvenMediaEngine (OME) Streaming Server
   ovenmediaengine:
-    image: ome:latest
+    image: drakesoftware/ome:latest
     ports:
       - "8081:8081"
       - "1935:1935"
@@ -76,7 +76,7 @@ services:
 
   # ✅ Angular Frontend Application
   angular-app:
-    image: full-stack-ui:latest
+    image: drakesoftware/full-stack-ui:latest
     container_name: full-stack-ui
     ports:
       - "4400:4400"
@@ -88,7 +88,7 @@ services:
 
   # ✅ Low Latency HLS (LLHLS) Server
   llhls-server:
-    image: llhls-server:latest
+    image: drakesoftware/llhls-server:latest
     container_name: llhls-server
     ports:
       - "59919:59919" # Ensure it's mapped to 59919 inside the container
@@ -102,7 +102,7 @@ services:
 
   # ✅ IPAD-UIp (now using tagging-app image)
   ipad-ui:
-    image: sp-coach-app:latest
+    image: drakesoftware/sp-coach-app:latest
     container_name: ipad-ui
     ports:
       - "4300:4300"
@@ -114,7 +114,7 @@ services:
 
   # ✅ Mobile App
   tagging-app:
-    image: tagging-app:latest
+    image: drakesoftware/tagging-app:latest
     container_name: tagging-app
     ports:
       - "4600:4600"
