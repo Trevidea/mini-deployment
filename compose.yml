@@ -1,37 +1,37 @@
 services:
   # ✅ Service Gateway
-  service-gateway:
-    image: drakesoftware/service-gateway:latest
-    container_name: service-gateway
-    ports:
-      - "1437:1437"
-    volumes:
-      - ome-media:/app/dumps
-      - service-gateway-logs:/app/logs
-    environment:
-      TZ: Asia/Kolkata
-      # TZ: America/New_York
-      PG_SRV: postgres
-      PG_DBS: half-stack
-      PG_USR_FILE: /run/secrets/pg_user
-      PG_PWD_FILE: /run/secrets/pg_password
-      PG_PORT: 5432
-      OM_URL: http://ovenmediaengine:8081/v1
-      OM_HOST_NAME: localhost
-      OM_CTRL_SVR: service-gateway:1437
-      OM_DUMPS: /app/dumps
-    secrets:
-      - pg_user
-      - pg_password
-    networks:
-      - private
-    depends_on:
-      - postgres
-    restart: unless-stopped
+  # service-gateway:
+  #   image: service-gateway:latest
+  #   container_name: service-gateway
+  #   ports:
+  #     - "1437:1437"
+  #   volumes:
+  #     - ome-media:/app/dumps
+  #     - service-gateway-logs:/app/logs
+  #   environment:
+  #     TZ: Asia/Kolkata
+  #     # TZ: America/New_York
+  #     PG_SRV: postgres
+  #     PG_DBS: half-stack
+  #     PG_USR_FILE: /run/secrets/pg_user
+  #     PG_PWD_FILE: /run/secrets/pg_password
+  #     PG_PORT: 5432
+  #     OM_URL: http://ovenmediaengine:8081/v1
+  #     OM_HOST_NAME: localhost
+  #     OM_CTRL_SVR: service-gateway:1437
+  #     OM_DUMPS: /app/dumps
+  #   secrets:
+  #     - pg_user
+  #     - pg_password
+  #   networks:
+  #     - private
+  #   depends_on:
+  #     - postgres
+  #   restart: unless-stopped
 
   # ✅ PostgreSQL Database (now using sp-db image)
   postgres:
-    image: drakesoftware/sp-db:latest
+    image: sp-db:latest
     environment:
       POSTGRES_DB: half-stack
       PG_USR_FILE: /run/secrets/pg_user
@@ -46,7 +46,7 @@ services:
 
   # ✅ Relay Server
   relay-server:
-    image: drakesoftware/relay-server:latest
+    image: relay-server:latest
     container_name: relay-server
     ports:
       - "3001:3001"
@@ -60,7 +60,7 @@ services:
 
   # ✅ OvenMediaEngine (OME) Streaming Server
   ovenmediaengine:
-    image: drakesoftware/ome:latest
+    image: ome:latest
     ports:
       - "8081:8081"
       - "1935:1935"
@@ -76,7 +76,7 @@ services:
 
   # ✅ Angular Frontend Application
   angular-app:
-    image: drakesoftware/full-stack-ui:latest
+    image: full-stack-ui:latest
     container_name: full-stack-ui
     ports:
       - "4400:4400"
@@ -88,7 +88,7 @@ services:
 
   # ✅ Low Latency HLS (LLHLS) Server
   llhls-server:
-    image: drakesoftware/llhls-server:latest
+    image: llhls-server:latest
     container_name: llhls-server
     ports:
       - "59919:59919" # Ensure it's mapped to 59919 inside the container
@@ -102,7 +102,7 @@ services:
 
   # ✅ IPAD-UIp (now using tagging-app image)
   ipad-ui:
-    image: drakesoftware/sp-coach-app:latest
+    image: sp-coach-app:latest
     container_name: ipad-ui
     ports:
       - "4300:4300"
@@ -114,7 +114,7 @@ services:
 
   # ✅ Mobile App
   tagging-app:
-    image: drakesoftware/tagging-app:latest
+    image: tagging-app:latest
     container_name: tagging-app
     ports:
       - "4600:4600"
@@ -139,6 +139,7 @@ networks:
 # ✅ Volumes
 volumes:
   postgres_data:
+    driver: local
   service-gateway-logs:
     driver: local
   relay-config:
