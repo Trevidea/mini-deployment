@@ -1,33 +1,33 @@
 services:
   # ✅ Service Gateway
-  # service-gateway:
-  #   image: service-gateway:latest
-  #   container_name: service-gateway
-  #   ports:
-  #     - "1437:1437"
-  #   volumes:
-  #     - ome-media:/app/dumps
-  #     - service-gateway-logs:/app/logs
-  #   environment:
-  #     TZ: Asia/Kolkata
-  #     # TZ: America/New_York
-  #     PG_SRV: postgres
-  #     PG_DBS: half-stack
-  #     PG_USR_FILE: /run/secrets/pg_user
-  #     PG_PWD_FILE: /run/secrets/pg_password
-  #     PG_PORT: 5432
-  #     OM_URL: http://ovenmediaengine:8081/v1
-  #     OM_HOST_NAME: localhost
-  #     OM_CTRL_SVR: service-gateway:1437
-  #     OM_DUMPS: /app/dumps
-  #   secrets:
-  #     - pg_user
-  #     - pg_password
-  #   networks:
-  #     - private
-  #   depends_on:
-  #     - postgres
-  #   restart: unless-stopped
+  service-gateway:
+    image: service-gateway:latest
+    container_name: service-gateway
+    ports:
+      - "1437:1437"
+    volumes:
+      - ome-media:/app/dumps
+      - service-gateway-logs:/app/logs
+    environment:
+      TZ: Asia/Kolkata
+      # TZ: America/New_York
+      PG_SRV: postgres
+      PG_DBS: half-stack
+      PG_USR_FILE: /run/secrets/pg_user
+      PG_PWD_FILE: /run/secrets/pg_password
+      PG_PORT: 5432
+      OM_URL: http://ovenmediaengine:8081/v1
+      OM_HOST_NAME: localhost
+      OM_CTRL_SVR: service-gateway:1437
+      OM_DUMPS: /app/dumps
+    secrets:
+      - pg_user
+      - pg_password
+    networks:
+      - private
+    depends_on:
+      - postgres
+    restart: unless-stopped
 
   # ✅ PostgreSQL Database (now using sp-db image)
   postgres:
