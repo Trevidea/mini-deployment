@@ -85,7 +85,7 @@ services:
     image: drakesoftware/llhls-server:latest
     container_name: llhls-server
     ports:
-      - "59919:59919" # Ensure it's mapped to 59919 inside the container
+      - "59919:80" # Ensure it's mapped to 59919 inside the container
     volumes:
       - ome-media:/usr/share/nginx/html/hls # Serve OME HLS dumps
     networks:
