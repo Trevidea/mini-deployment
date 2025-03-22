@@ -25,3 +25,8 @@ build/
 # Ignore IDE/editor configuration files and folders
 .vscode
 .idea
+
+#Ignore CMake files
+CMakeCache.txt
+dependencies/
+third_party_install/

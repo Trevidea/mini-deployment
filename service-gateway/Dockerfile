@@ -1,52 +1,57 @@
-# Use Ubuntu as the base image
-FROM ubuntu:latest
+# --- Builder Stage ---
+FROM ubuntu:latest AS builder
 
-# Install required packages
+# Disable interactive dialogue
+ENV DEBIAN_FRONTEND=noninteractive
+
+# Install necessary build tools and dependencies
 RUN apt-get update && apt-get install -y \
     build-essential \
     cmake \
-    ninja-build \
+    git \
+    pkg-config \
+    autoconf \
+    automake \
+    libtool \ 
+    libzmq3-dev \
     libpq-dev \
     libssl-dev \
-    libreadline-dev \
-    zlib1g-dev \
-    git \
-    libzmq3-dev \
-    libcurl4-openssl-dev \
-    libboost-all-dev \
-    bash \
     curl \
-    && rm -rf /var/lib/apt/lists/*  # Clean up to reduce image size
-
-# Set environment variables
-ENV DEBIAN_FRONTEND=noninteractive
-ENV CMAKE_PREFIX_PATH=/app/dependency
-
+    unzip
 # Set working directory
 WORKDIR /app
 
-# Copy the project files into the container
-COPY . /app
+# Copy the entire service-gateway project into the container
+COPY . .
 
-# Copy dependencies (if any specific ones are needed)
-COPY dependency /app/dependency
+# CMD ["/bin/sh"]
+# Build the project (this will run your CMake configuration, which builds the external dependencies using your stamp mechanism)
+RUN rm -rf build && mkdir build && cd build &&  cmake .. -DCMAKE_BUILD_TYPE=Release &&  cmake --build . -j$(nproc)
 
-# Create logs directory
-RUN mkdir -p /app/logs
+# --- Runtime Stage ---
+FROM ubuntu:latest AS runtime
 
-# Clean up previous builds
-RUN rm -rf /app/build /app/CMakeCache.txt
+# Install minimal runtime libraries (e.g., standard C++ runtime)
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    libstdc++6 \
+    libpq5 \
+    libzmq5 \
+    && rm -rf /var/lib/apt/lists/*
 
-# Install dependencies, build the project, and clean up build tools
-# RUN cmake -S . -B build -DCMAKE_CXX_FLAGS="-Wno-error -Wno-format-truncation" && cmake --build -j $(nproc) build --config Release
+WORKDIR /app
 
-# Create the build directory before running cmake
-RUN mkdir -p /app/build && cd /app/build && cmake -G Ninja .. && cmake --build . -j 4
+# Copy the built service-gateway binary from the builder stage
+COPY --from=builder /app/build/api/capture-server /usr/local/bin/capture-server
 
-# Ensure the binary has execution permission
-RUN chmod +x /app/build/api/capture-server
+# Copy the external dependencies (shared libraries) from third_party_install
+COPY --from=builder /app/third_party_install /usr/local/third_party_install
 
-# Expose the required port
+# Update the runtime library search path so that your binary finds the required shared libraries.
+# Adjust the paths below to include the lib directories for the dependencies that produce shared libraries.
+ENV LD_LIBRARY_PATH="/usr/local/third_party_install/libzmq/lib:/usr/local/third_party_install/duckdb:/usr/local/third_party_install/spdlog/lib:/usr/local/third_party_install/fmt/lib:/usr/local/third_party_install/jsoncpp/lib:/usr/local/third_party_install/cpr/lib:${LD_LIBRARY_PATH}"
+
+# Expose the port your service uses (adjust if necessary)
 EXPOSE 1437
-# Set the default command to run the application and store logs
-CMD ["/bin/bash", "-c", "/app/build/api/capture-server | tee /app/logs/service-gateway.log"]
+
+# Set the default command to run your service
+CMD ["/usr/local/bin/capture-server"]
