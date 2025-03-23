@@ -1,30 +1,35 @@
 #!/bin/bash
 set -e
 
-echo "Starting build of all microservice images..."
+# Define an array with project directories indexed starting from 1.
+projects[1]="full-stack"
+projects[2]="llhls-server"
+projects[3]="ome"
+projects[4]="relay-server"
+projects[5]="service-gateway"
+projects[6]="sp-coach-app"
+projects[7]="sp-db"
+projects[8]="tagging-app"
 
-echo "Building full-stack service..."
-cd full-stack && ./build.sh && cd ..
+# If no arguments are provided, build all projects.
+if [ "$#" -eq 0 ]; then
+    indices=(1 2 3 4 5 6 7 8)
+else
+    indices=("$@")
+fi
 
-echo "Building llhls-server service..."
-cd llhls-server && ./build.sh && cd ..
+echo "Starting build of selected microservice images..."
 
-echo "Building ome service..."
-cd ome && ./build.sh && cd ..
+# Loop through each index provided (or all if none were provided).
+for index in "${indices[@]}"; do
+    project=${projects[$index]}
+    if [ -z "$project" ]; then
+        echo "Invalid project number: $index"
+        exit 1
+    fi
 
-echo "Building relay-server service..."
-cd relay-server && ./build.sh && cd ..
+    echo "Building $project service..."
+    cd "$project" && ./build.sh && cd ..
+done
 
-echo "Building service-gateway service..."
-cd service-gateway && ./build.sh && cd ..
-
-echo "Building sp-coach-app service..."
-cd sp-coach-app && ./build.sh && cd ..
-
-echo "Building sp-db service..."
-cd sp-db && ./build.sh && cd ..
-
-echo "Building tagging-app service..."
-cd tagging-app && ./build.sh && cd ..
-
-echo "All images built successfully!"
+echo "All selected images built successfully!"
