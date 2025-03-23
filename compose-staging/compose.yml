@@ -1,47 +1,53 @@
 services:
   # ✅ Service Gateway
-  # service-gateway:
-  #   image: drakesoftware/service-gateway:latest
-  #   container_name: service-gateway
-  #   ports:
-  #     - "1437:1437"
-  #   volumes:
-  #     - /Users/manishverma/git/sp-proj/ome_dumps:/app/dumps
-  #     - service-gateway-logs:/app/logs
-  #   environment:
-  #     TZ: Asia/Kolkata
-  #     # TZ: America/New_York
-  #     PG_SRV: postgres
-  #     PG_DBS: half-stack
-  #     PG_USR: "drake_8283"
-  #     PG_PWD: "sportpip"
-  #     PG_PORT: 5432
-  #     OM_URL: http://ovenmediaengine:8081/v1
-  #     OM_HOST_NAME: localhost
-  #     OM_CTRL_SVR: service-gateway:1437
-  #   networks:
-  #     - private
-  #   depends_on:
-  #     - postgres
-  #   restart: unless-stopped
+  service-gateway:
+    image: drakesoftware/service-gateway-arm64:latest
+    container_name: service-gateway
+    ports:
+      - "1437:1437"
+    volumes:
+      - ome-media:/app/dumps
+      - service-gateway:/app/logs
+      - /etc/localtime:/etc/localtime:ro
+    environment:
+      # TZ: Asia/Kolkata
+      # TZ: America/New_York
+      PG_SRV: postgres
+      PG_DBS: half-stack
+      PG_USER_FILE: /run/secrets/pg_user
+      PG_PASSWORD_FILE: /run/secrets/pg_password
+      PG_PORT: 5432
+      OM_URL: http://localhost:8081/v1
+      OM_HOST_NAME: localhost
+      OM_CTRL_SVR: localhost:1437
+      OM_DUMPS: /app/dumps
+    secrets:
+      - pg_user
+      - pg_password
+    networks:
+      - private
+    depends_on:
+      - postgres
+    restart: unless-stopped
 
   # ✅ PostgreSQL Database (now using sp-db image)
   postgres:
-    image: drakesoftware/sp-db:latest
-    ports:
-      - "5432:5432"
+    image: drakesoftware/sp-db-arm64:latest
     environment:
       POSTGRES_DB: half-stack
-      POSTGRES_USER: drake_8283
-      POSTGRES_PASSWORD: sportpip
+      PG_USER_FILE: /run/secrets/pg_user
+      PG_PASSWORD_FILE: /run/secrets/pg_password
+    secrets:
+      - pg_user
+      - pg_password
     volumes:
       - postgres_data:/var/lib/postgresql/data
     networks:
       - private
 
-  # ✅ Relay Server
+  # ✅ Relay Server (Linux Deployment)
   relay-server:
-    image: drakesoftware/relay-server:latest
+    image: drakesoftware/relay-server-arm64:latest
     container_name: relay-server
     ports:
       - "3001:3001"
@@ -55,88 +61,111 @@ services:
 
   # ✅ OvenMediaEngine (OME) Streaming Server
   ovenmediaengine:
-    image: drakesoftware/ome:latest
+    image: drakesoftware/ome-arm64:latest
     ports:
       - "8081:8081"
       - "1935:1935"
       - "3333:3333"
       - "3334:3334"
     volumes:
-      - /Users/manishverma/git/sp-proj/ome_dumps:/opt/ovenmediaengine/bin/dumps
+      - ome-media:/opt/ovenmediaengine/bin/dumps
     networks:
       - private
     environment:
       - OME_HOST_IP=0.0.0.0
     restart: unless-stopped
 
-  # ✅ Angular Frontend Application
-  angular-app:
-    image: drakesoftware/full-stack-ui:latest
+  # ✅ Llhls Server (Linux Deployment)
+  llhls-server:
+    image: drakesoftware/llhls-server-arm64:latest
+    container_name: llhls-server-linux
+    ports:
+      - "59919:59919"
+    restart: unless-stopped
+    volumes:
+      - ome-media:/usr/share/nginx/html/hls
+    networks:
+      - private
+    depends_on:
+      - ovenmediaengine
+
+  # ✅ Angular Frontend Application for Linux
+  angular-app-linux:
+    image: drakesoftware/full-stack-ui-arm64:latest
     container_name: full-stack-ui
     ports:
       - "4400:4400"
+    environment:
+      API_URL: "https://api.example.com"
+      CP_SERVER_BASE_URL: "http://localhost:1437/api"
+      HLS_URL: "http://localhost:59919"
+      SP_RELAY_URL: "http://localhost:3001"
+      RTMP_URL: "rtmp://localhost:1935"
+      PLAYER_URL: "https://localhost:3334"
     volumes:
       - angular_app_config:/etc/nginx/conf.d:ro
     restart: always
     networks:
       - private
 
-  # ✅ Low Latency HLS (LLHLS) Server
-  llhls-server:
-    image: drakesoftware/llhls-server:latest
-    container_name: llhls-server
+  # ✅ SP-COACH-APP (Linux Deployment)
+  sp-coach-app:
+    image: drakesoftware/sp-coach-app-arm64:latest
+    container_name: sp-coach-app
     ports:
-      - "59919:59919" # Ensure it's mapped to 59919 inside the container
-    volumes:
-      - /Users/manishverma/git/sp-proj/ome_dumps:/usr/share/nginx/html/hls # Serve OME HLS dumps
-    networks:
-      - private
-    depends_on:
-      - ovenmediaengine # Ensure OME starts first
-    restart: unless-stopped
-
-  # ✅ IPAD-UIp (now using tagging-app image)
-  ipad-ui:
-    image: drakesoftware/sp-coach-app:latest
-    container_name: ipad-ui
-    ports:
-      - "4300:4300"
+      - "4300:4300" # Map container's port 80 to host's port 4300
     volumes:
       - coach_app_config:/etc/nginx/conf.d:ro
+    environment:
+      API_URL: "https://api.example.com"
+      CP_SERVER_BASE_URL: "http://localhost:1437/api"
+      HLS_URL: "http://localhost:59919"
+      SP_RELAY_URL: "http://localhost:3001"
+      RTMP_URL: "rtmp://localhost:1935"
+      PLAYER_URL: "https://localhost:3334"
     restart: always
     networks:
       - private
 
-  # ✅ Mobile App
-  tagging-app:
-    image: drakesoftware/tagging-app:latest
+  # ✅ Mobile App for Linux
+  tagging-app-linux:
+    image: drakesoftware/tagging-app-arm64:latest
     container_name: tagging-app
     ports:
       - "4600:4600"
     volumes:
       - mobile_app_conf:/etc/nginx/conf.d:ro
+    environment:
+      SP_RELAY_URL: "http://localhost:3001"
+      CP_SERVER_BASE_URL: "http://localhost:1437/api"
     restart: always
     networks:
       - private
 
-# ✅ Network Configuration
-networks:
-  private:
-    driver: bridge
+secrets:
+  pg_user:
+    file: ./pg_user.txt
+  pg_password:
+    file: ./pg_password.txt
 
-# ✅ Volumes
 volumes:
+  service-gateway:
+    driver: local
   postgres_data:
-  service-gateway-logs:
+    driver: local
+  angular_app_config:
+    driver: local
+  mobile_app_conf:
+    driver: local
+  coach_app_config:
     driver: local
   relay-config:
     driver: local
   relay-server-logs:
     driver: local
-  angular_app_config:
-    driver: local
   ome-media:
-  coach_app_config:
     driver: local
-  mobile_app_conf:
-    driver: local
+
+networks:
+  private:
+    driver: bridge
