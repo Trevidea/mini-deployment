@@ -26,8 +26,10 @@ COPY . .
 
 # CMD ["/bin/sh"]
 # Build the project (this will run your CMake configuration, which builds the external dependencies using your stamp mechanism)
-RUN rm -rf build && mkdir build && cd build &&  cmake .. -DCMAKE_BUILD_TYPE=Release &&  cmake --build . -j$(nproc)
-
+# RUN rm -rf build && mkdir build && cd build &&  cmake .. -DCMAKE_BUILD_TYPE=Release &&  cmake --build . -j$(nproc)
+RUN cmake -DCMAKE_BUILD_TYPE:STRING=Debug -DCMAKE_EXPORT_COMPILE_COMMANDS:BOOL=TRUE --no-warn-unused-cli -S./ -B./build
+RUN cmake --build ./build --config Debug --target all -j 10 --
+    
 # --- Runtime Stage ---
 FROM ubuntu:latest AS runtime
 
