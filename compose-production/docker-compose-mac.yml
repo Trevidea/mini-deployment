@@ -1,7 +1,7 @@
 services:
   # ✅ Service Gateway
   service-gateway:
-    image: service-gateway-arm64:latest
+    image: drakesoftware/service-gateway-arm64:latest
     container_name: service-gateway
     ports:
       - "1437:1437"
@@ -32,7 +32,7 @@ services:
 
   # ✅ PostgreSQL Database (now using sp-db image)
   postgres:
-    image: sp-db-arm64:latest
+    image: drakesoftware/sp-db-arm64:latest
     environment:
       POSTGRES_DB: half-stack
       PG_USER_FILE: /run/secrets/pg_user
@@ -47,7 +47,7 @@ services:
 
   # ✅ Relay Server (Linux Deployment)
   relay-server:
-    image: relay-server-arm64:latest
+    image: drakesoftware/relay-server-arm64:latest
     container_name: relay-server
     ports:
       - "3001:3001"
@@ -61,7 +61,7 @@ services:
 
   # ✅ OvenMediaEngine (OME) Streaming Server
   ovenmediaengine:
-    image: ome-arm64:latest
+    image: drakesoftware/ome-arm64:latest
     ports:
       - "8081:8081"
       - "1935:1935"
@@ -77,7 +77,7 @@ services:
 
   # ✅ Llhls Server (Linux Deployment)
   llhls-server:
-    image: llhls-server-arm64:latest
+    image: drakesoftware/llhls-server-arm64:latest
     container_name: llhls-server-linux
     ports:
       - "59919:59919"
@@ -91,7 +91,7 @@ services:
 
   # ✅ Angular Frontend Application for Linux
   angular-app-linux:
-    image: full-stack-ui-arm64:latest
+    image: drakesoftware/full-stack-ui-arm64:latest
     container_name: full-stack-ui
     ports:
       - "4400:4400"
@@ -110,7 +110,7 @@ services:
 
   # ✅ SP-COACH-APP (Linux Deployment)
   sp-coach-app:
-    image: sp-coach-app-arm64:latest
+    image: drakesoftware/sp-coach-app-arm64:latest
     container_name: sp-coach-app
     ports:
       - "4300:4300" # Map container's port 80 to host's port 4300
@@ -129,7 +129,7 @@ services:
 
   # ✅ Mobile App for Linux
   tagging-app-linux:
-    image: tagging-app-arm64:latest
+    image: drakesoftware/tagging-app-arm64:latest
     container_name: tagging-app
     ports:
       - "4600:4600"
