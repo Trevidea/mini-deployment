@@ -26,6 +26,9 @@ FROM nginx:alpine
 
 # Copy the build output to the Nginx HTML directory
 COPY --from=build /app/dist/flexy /usr/share/nginx/html
+COPY config.template.js /usr/share/nginx/html/
+COPY entrypoint.sh /entrypoint.sh
+RUN chmod +x /entrypoint.sh
 
 # Copy the Nginx configuration file
 COPY nginx.conf /etc/nginx/conf.d/default.conf
@@ -33,6 +36,6 @@ COPY nginx.conf /etc/nginx/conf.d/default.conf
 # Expose port 80
 EXPOSE 4400
 
-# Start Nginx when the container starts
-CMD ["nginx", "-g", "daemon off;"]
+# Start Nginx
+ENTRYPOINT ["/entrypoint.sh"]
 

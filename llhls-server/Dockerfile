@@ -1,14 +1,11 @@
 # Use an official Nginx base image
-FROM nginx:alpine
+FROM jonasal/nginx-certbot:5.4.1-nginx1.27.4
 
 # Set the working directory
 WORKDIR /usr/share/nginx/html
 
 # Copy HTML file
 COPY index.html /usr/share/nginx/html/
-
-# Copy Nginx configuration
-COPY nginx.conf /etc/nginx/nginx.conf
 
 # Create necessary directories
 RUN mkdir -p /usr/share/nginx/html/hls
