@@ -164,7 +164,7 @@ services:
 configs:
   nginx_service_gateway_config: 
     file: ./service-gateway/nginx.conf
-  llhls_server_config:
+  llhls-server-config:
     file:./llhls-server/llhls-server.conf
 secrets:
   pg_user:
