@@ -98,7 +98,7 @@ services:
     env_file:
       - ./llhls-server/nginx-certbot.env
     configs:
-      - source: llhls_server_config
+      - source: llhls-server-config
         target: /etc/nginx/user_conf.d/llhls-server.conf
     restart: unless-stopped
     volumes:
