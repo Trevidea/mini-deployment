@@ -103,7 +103,7 @@ services:
     restart: unless-stopped
     volumes:
       - ome-media:/usr/share/nginx/html/hls
-      - llhls_nginx_secrets: /etc/letsencrypt
+      - llhls-nginx-secrets:/etc/letsencrypt
     networks:
       - private
     depends_on:
@@ -189,7 +189,7 @@ volumes:
     driver: local
   ome-media:
     driver: local
-  llhls_nginx_secrets:
+  llhls-nginx-secrets:
 
 
 networks:
