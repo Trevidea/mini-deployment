@@ -121,7 +121,7 @@ services:
       HLS_URL: "${HLS_HOST_URL}"
       SP_RELAY_URL: "http://${HOST_NAME}:3001"
       RTMP_URL: "rtmp://${HOST_NAME}:1935"
-      PLAYER_URL: "https://${HOST_NAME}:3334"
+      PLAYER_URL: "https://${OM_HOST_NAME}:3334"
     volumes:
       - angular_app_config:/etc/nginx/conf.d:ro
     restart: always
@@ -142,7 +142,7 @@ services:
       HLS_URL: "${HLS_HOST_URL}"
       SP_RELAY_URL: "http://${HOST_NAME}:3001"
       RTMP_URL: "rtmp://${HOST_NAME}:1935"
-      PLAYER_URL: "https://${HOST_NAME}:3334"
+      PLAYER_URL: "https://${OM_HOST_NAME}:3334"
     restart: always
     networks:
       - private
