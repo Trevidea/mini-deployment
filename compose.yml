@@ -2,7 +2,7 @@ services:
   nginx-service-gateway:
     image: nginx:latest
     ports:
-      - 8080:8080
+      - 80:80
     configs:
       - source: nginx_service_gateway_config
         target: /etc/nginx/nginx.conf
@@ -30,8 +30,8 @@ services:
       PG_PASSWORD_FILE: /run/secrets/pg_password
       PG_PORT: 5432
       OM_URL: http://ovenmediaengine:8081/v1
-      OM_HOST_NAME: ${OM_HOST_NAME}
-      OM_CTRL_SVR: nginx-service-gateway:${SVR_GTW_PORT}
+      OM_HOST_NAME: ${HOST_NAME}
+      OM_CTRL_SVR: ${API_HOST_NAME}
       OM_DUMPS: /app/dumps
     secrets:
       - pg_user
@@ -117,11 +117,11 @@ services:
       - "4400:4400"
     environment:
       API_URL: "https://api.example.com"
-      CP_SERVER_BASE_URL: "http://${HOST_NAME}:${SVR_GTW_PORT}/api"
+      CP_SERVER_BASE_URL: "http://${API_HOST_NAME}/api"
       HLS_URL: "${HLS_HOST_URL}"
       SP_RELAY_URL: "http://${HOST_NAME}:3001"
       RTMP_URL: "rtmp://${HOST_NAME}:1935"
-      PLAYER_URL: "https://${OM_HOST_NAME}:3334"
+      PLAYER_URL: "https://${OM_HOST_NAME}"
     volumes:
       - angular_app_config:/etc/nginx/conf.d:ro
     restart: always
@@ -142,7 +142,7 @@ services:
       HLS_URL: "${HLS_HOST_URL}"
       SP_RELAY_URL: "http://${HOST_NAME}:3001"
       RTMP_URL: "rtmp://${HOST_NAME}:1935"
-      PLAYER_URL: "https://${OM_HOST_NAME}:3334"
+      PLAYER_URL: "https://${OM_HOST_NAME}"
     restart: always
     networks:
       - private
@@ -163,9 +163,7 @@ services:
       - private
 configs:
   nginx_service_gateway_config: 
-    file: ./service-gateway/nginx.conf
-  llhls-server-config:
-    file:./llhls-server/llhls-server.conf
+    file: ./nginx.conf
 secrets:
   pg_user:
     file: ./pg_user.txt
