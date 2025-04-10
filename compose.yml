@@ -11,6 +11,28 @@ services:
       - private
     depends_on:
       - service-gateway
+
+
+  # ✅ Angular Frontend Application for Linux
+  angular-app-linux:
+    image: drakesoftware/full-stack-ui-arm64:latest
+    container_name: full-stack-ui
+    # ports:
+    #   - "4400:4400"
+    environment:
+      API_URL: "https://api.example.com"
+      CP_SERVER_BASE_URL: "http://${API_HOST_NAME}/api"
+      HLS_URL: "http://${HLS_HOST_NAME}"
+      SP_RELAY_URL: "http://${RELAY_HOST_NAME}"
+      RTMP_URL: "rtmp://${RTMP_HOST_NAME}"
+      PLAYER_URL: "https://${OM_HOST_NAME}"
+    volumes:
+      - angular_app_config:/etc/nginx/conf.d:ro
+    restart: always
+    networks:
+      - private
+
+
   # ✅ Service Gateway
   service-gateway:
     image: drakesoftware/service-gateway-arm64:latest
@@ -43,6 +65,36 @@ services:
       - postgres
     restart: unless-stopped
 
+  # ✅ OvenMediaEngine (OME) Streaming Server
+  ovenmediaengine:
+    image: drakesoftware/ome-arm64:latest
+    # ports:
+    #   - "8081:8081"
+    #   - "1935:1935"
+    #   - "3333:3333"
+    #   - "3334:3334"
+    volumes:
+      - ome-media:/opt/ovenmediaengine/bin/dumps
+    networks:
+      - private
+    environment:
+      - OME_HOST_IP=0.0.0.0
+    restart: unless-stopped
+
+  # ✅ Relay Server (Linux Deployment)
+  relay-server:
+    image: drakesoftware/relay-server-arm64:latest
+    container_name: relay-server
+    # ports:
+    #   - "3001:3001"
+    #   - "4001:4001"
+    volumes:
+      - relay-config:/etc/relay-server
+      - relay-server-logs:/var/log/relay-server
+    restart: unless-stopped
+    networks:
+      - private
+
   # ✅ PostgreSQL Database (now using sp-db image)
   postgres:
     image: drakesoftware/sp-db-arm64:latest
@@ -58,42 +110,12 @@ services:
     networks:
       - private
 
-  # ✅ Relay Server (Linux Deployment)
-  relay-server:
-    image: drakesoftware/relay-server-arm64:latest
-    container_name: relay-server
-    ports:
-      - "3001:3001"
-      - "4001:4001"
-    volumes:
-      - relay-config:/etc/relay-server
-      - relay-server-logs:/var/log/relay-server
-    restart: unless-stopped
-    networks:
-      - private
-
-  # ✅ OvenMediaEngine (OME) Streaming Server
-  ovenmediaengine:
-    image: drakesoftware/ome-arm64:latest
-    ports:
-      - "8081:8081"
-      - "1935:1935"
-      - "3333:3333"
-      - "3334:3334"
-    volumes:
-      - ome-media:/opt/ovenmediaengine/bin/dumps
-    networks:
-      - private
-    environment:
-      - OME_HOST_IP=0.0.0.0
-    restart: unless-stopped
-
   # ✅ Llhls Server (Linux Deployment)
   llhls-server:
     image: drakesoftware/llhls-server-arm64:latest
     container_name: llhls-server-linux
-    ports:
-      - "59919:59919"
+    # ports:
+    #   - "59919:59919"
     restart: unless-stopped
     volumes:
       - ome-media:/usr/share/nginx/html/hls
@@ -101,25 +123,6 @@ services:
       - private
     depends_on:
       - ovenmediaengine
-
-  # ✅ Angular Frontend Application for Linux
-  angular-app-linux:
-    image: drakesoftware/full-stack-ui-arm64:latest
-    container_name: full-stack-ui
-    ports:
-      - "4400:4400"
-    environment:
-      API_URL: "https://api.example.com"
-      CP_SERVER_BASE_URL: "http://${API_HOST_NAME}/api"
-      HLS_URL: "${HLS_HOST_URL}"
-      SP_RELAY_URL: "http://${HOST_NAME}:3001"
-      RTMP_URL: "rtmp://${HOST_NAME}:1935"
-      PLAYER_URL: "https://${OM_HOST_NAME}"
-    volumes:
-      - angular_app_config:/etc/nginx/conf.d:ro
-    restart: always
-    networks:
-      - private
 
   # ✅ SP-COACH-APP (Linux Deployment)
   sp-coach-app:
