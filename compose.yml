@@ -1,10 +1,10 @@
 services:
-  nginx-service-gateway:
+  nginx-proxy-server:
     image: nginx:latest
     ports:
       - 80:80
     configs:
-      - source: nginx_service_gateway_config
+      - source: nginx_proxy_server_config
         target: /etc/nginx/nginx.conf
     networks:
       - public
@@ -158,7 +158,7 @@ services:
     networks:
       - private
 configs:
-  nginx_service_gateway_config: 
+  nginx_proxy_server_config: 
     file: ./nginx.conf
 secrets:
   pg_user:
