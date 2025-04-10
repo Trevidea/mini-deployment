@@ -134,10 +134,10 @@ services:
       - coach_app_config:/etc/nginx/conf.d:ro
     environment:
       API_URL: "https://api.example.com"
-      CP_SERVER_BASE_URL: "http://${HOST_NAME}:${SVR_GTW_PORT}/api"
-      HLS_URL: "${HLS_HOST_URL}"
-      SP_RELAY_URL: "http://${HOST_NAME}:3001"
-      RTMP_URL: "rtmp://${HOST_NAME}:1935"
+      CP_SERVER_BASE_URL: "http://${API_HOST_NAME}/api"
+      HLS_URL: "http://${HLS_HOST_NAME}"
+      SP_RELAY_URL: "http://${RELAY_HOST_NAME}"
+      RTMP_URL: "rtmp://${RTMP_HOST_NAME}"
       PLAYER_URL: "https://${OM_HOST_NAME}"
     restart: always
     networks:
@@ -152,8 +152,8 @@ services:
     volumes:
       - mobile_app_conf:/etc/nginx/conf.d:ro
     environment:
-      SP_RELAY_URL: "http://${HOST_NAME}:3001"
-      CP_SERVER_BASE_URL: "http://${HOST_NAME}:${SVR_GTW_PORT}/api"
+      SP_RELAY_URL: "http://${RELAY_HOST_NAME}"
+      CP_SERVER_BASE_URL: "http://${API_HOST_NAME}/api"
     restart: always
     networks:
       - private
