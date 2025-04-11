@@ -13,6 +13,7 @@ services:
       - private
     depends_on:
       - service-gateway
+      - ovenmediaengine
 
 
   # ✅ Angular Frontend Application for Linux
