@@ -6,6 +6,8 @@ services:
     configs:
       - source: nginx_proxy_server_config
         target: /etc/nginx/nginx.conf
+    volumes:
+      - ome-conf:/opt/ovenmediaengine/bin/conf
     networks:
       - public
       - private
@@ -75,6 +77,7 @@ services:
     #   - "3334:3334"
     volumes:
       - ome-media:/opt/ovenmediaengine/bin/dumps
+      - ome-conf:/opt/ovenmediaengine/bin/conf
     networks:
       - private
     environment:
@@ -167,6 +170,7 @@ secrets:
     file: ./pg_password.txt
 
 volumes:
+  ome-conf:
   service-gateway:
     driver: local
   postgres_data:
