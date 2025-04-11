@@ -53,7 +53,7 @@ services:
       PG_PORT: 5432
       OM_URL: http://ovenmediaengine:8081/v1
       OM_HOST_NAME: ${HOST_NAME}
-      OM_CTRL_SVR: ${API_HOST_NAME}
+      OM_CTRL_SVR: service-gateway:1437
       OM_DUMPS: /app/dumps
     secrets:
       - pg_user
