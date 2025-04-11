@@ -3,6 +3,7 @@ services:
     image: nginx:latest
     ports:
       - 80:80
+      - 443:443
     configs:
       - source: nginx_proxy_server_config
         target: /etc/nginx/nginx.conf
