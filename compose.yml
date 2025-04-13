@@ -29,7 +29,7 @@ services:
     #   - "4400:4400"
     environment:
       API_URL: "https://api.example.com"
-      CP_SERVER_BASE_URL: "http://${API_HOST_NAME}/api"
+      CP_SERVER_BASE_URL: "https://${API_HOST_NAME}/api"
       HLS_URL: "http://${HLS_HOST_NAME}"
       SP_RELAY_URL: "http://${RELAY_HOST_NAME}"
       RTMP_URL: "rtmp://${RTMP_HOST_NAME}"
@@ -59,7 +59,7 @@ services:
       PG_USER_FILE: /run/secrets/pg_user
       PG_PASSWORD_FILE: /run/secrets/pg_password
       PG_PORT: 5432
-      OM_URL: http://ovenmediaengine:8081/v1
+      OM_URL: https://ovenmediaengine:8081/v1
       OM_HOST_NAME: ${OM_HOST_NAME}
       OM_CTRL_SVR: service-gateway:1437
       OM_DUMPS: /app/dumps
@@ -143,7 +143,7 @@ services:
       - coach_app_config:/etc/nginx/conf.d:ro
     environment:
       API_URL: "https://api.example.com"
-      CP_SERVER_BASE_URL: "http://${API_HOST_NAME}/api"
+      CP_SERVER_BASE_URL: "https://${API_HOST_NAME}/api"
       HLS_URL: "http://${HLS_HOST_NAME}"
       SP_RELAY_URL: "http://${RELAY_HOST_NAME}"
       RTMP_URL: "rtmp://${RTMP_HOST_NAME}"
@@ -162,7 +162,7 @@ services:
       - mobile_app_conf:/etc/nginx/conf.d:ro
     environment:
       SP_RELAY_URL: "http://${RELAY_HOST_NAME}"
-      CP_SERVER_BASE_URL: "http://${API_HOST_NAME}/api"
+      CP_SERVER_BASE_URL: "https://${API_HOST_NAME}/api"
     restart: always
     networks:
       - private
