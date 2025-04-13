@@ -30,8 +30,8 @@ services:
     environment:
       API_URL: "https://api.example.com"
       CP_SERVER_BASE_URL: "https://${API_HOST_NAME}/api"
-      HLS_URL: "http://${HLS_HOST_NAME}"
-      SP_RELAY_URL: "http://${RELAY_HOST_NAME}"
+      HLS_URL: "https://${HLS_HOST_NAME}"
+      SP_RELAY_URL: "https://${RELAY_HOST_NAME}"
       RTMP_URL: "rtmp://${RTMP_HOST_NAME}"
       PLAYER_URL: "https://${OM_HOST_NAME}"
     volumes:
@@ -145,7 +145,7 @@ services:
       API_URL: "https://api.example.com"
       CP_SERVER_BASE_URL: "https://${API_HOST_NAME}/api"
       HLS_URL: "http://${HLS_HOST_NAME}"
-      SP_RELAY_URL: "http://${RELAY_HOST_NAME}"
+      SP_RELAY_URL: "https://${RELAY_HOST_NAME}"
       RTMP_URL: "rtmp://${RTMP_HOST_NAME}"
       PLAYER_URL: "https://${OM_HOST_NAME}"
     restart: always
@@ -161,7 +161,7 @@ services:
     volumes:
       - mobile_app_conf:/etc/nginx/conf.d:ro
     environment:
-      SP_RELAY_URL: "http://${RELAY_HOST_NAME}"
+      SP_RELAY_URL: "https://${RELAY_HOST_NAME}"
       CP_SERVER_BASE_URL: "https://${API_HOST_NAME}/api"
     restart: always
     networks:
