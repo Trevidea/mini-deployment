@@ -8,8 +8,10 @@ services:
     env_file:
       - ./nginx-certbot.env
     configs:
-      - source: nginx_proxy_server_config
-        target: /etc/nginx/user_conf.d/nginx-sp-mini.conf.conf
+      - source: nginx_sp_mini_config
+        target: /etc/nginx/user_conf.d/nginx-sp-mini.conf
+      - source: nginx_api_sp_mini_config
+        target: /etc/nginx/user_conf.d/nginx-api-sp-mini.conf
     volumes:
       - ome-conf:/opt/ovenmediaengine/bin/conf
       - nginx_secrets:/etc/letsencrypt
@@ -167,8 +169,10 @@ services:
     networks:
       - private
 configs:
-  nginx_proxy_server_config: 
+  nginx_sp_mini_config: 
     file: ./nginx-sp-mini.conf
+  nginx_api_sp_mini_config: 
+    file: ./nginx-api-sp-mini.conf
 secrets:
   pg_user:
     file: ./pg_user.txt
