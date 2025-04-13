@@ -7,7 +7,7 @@ cp ./entrypoint.sh ../../full-stack/
 
 cd ../../full-stack
 
-docker build -t drakesoftware/full-stack-ui-arm64:latest -f ../mini-deployment/full-stack/Dockerfile .
+docker build --no-cache -t drakesoftware/full-stack-ui-arm64:latest -f ../mini-deployment/full-stack/Dockerfile .
 
 rm ./.dockerignore
 rm ./entrypoint.sh

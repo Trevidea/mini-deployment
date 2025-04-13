@@ -1,7 +1,7 @@
 # to run file docker-compose up --build , docker run -p 80:80 full-stack-web,docker run -p 80:80
 
 # Stage 1: Build the Angular application
-FROM node:21-alpine AS build
+FROM node:22-alpine AS build
 
 # Set the working directory
 WORKDIR /app

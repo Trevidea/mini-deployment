@@ -1,14 +1,18 @@
 services:
   nginx-proxy-server:
-    image: nginx:latest
+    image: jonasal/nginx-certbot:5.2.1-nginx1.27.0
+    restart: always
     ports:
       - 80:80
       - 443:443
+    env_file:
+      - ./nginx-certbot.env
     configs:
       - source: nginx_proxy_server_config
-        target: /etc/nginx/nginx.conf
+        target: /etc/nginx/user_conf.d/nginx.conf
     volumes:
       - ome-conf:/opt/ovenmediaengine/bin/conf
+      - nginx_secrets:/etc/letsencrypt
     networks:
       - public
       - private
@@ -173,6 +177,7 @@ secrets:
 
 volumes:
   ome-conf:
+  nginx_secrets:
   service-gateway:
     driver: local
   postgres_data:
