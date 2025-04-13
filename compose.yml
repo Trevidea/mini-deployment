@@ -10,8 +10,6 @@ services:
     configs:
       - source: nginx_sp_mini_config
         target: /etc/nginx/user_conf.d/nginx-sp-mini.conf
-      - source: nginx_api_sp_mini_config
-        target: /etc/nginx/user_conf.d/nginx-api-sp-mini.conf
     volumes:
       - ome-conf:/opt/ovenmediaengine/bin/conf
       - nginx_secrets:/etc/letsencrypt
@@ -171,8 +169,6 @@ services:
 configs:
   nginx_sp_mini_config: 
     file: ./nginx-sp-mini.conf
-  nginx_api_sp_mini_config: 
-    file: ./nginx-api-sp-mini.conf
 secrets:
   pg_user:
     file: ./pg_user.txt
