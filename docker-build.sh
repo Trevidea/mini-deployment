@@ -10,10 +10,12 @@ projects[5]="service-gateway"
 projects[6]="sp-coach-app"
 projects[7]="sp-db"
 projects[8]="tagging-app"
+projects[9]="airflow"
+projects[10]="keycloak"
 
 # If no arguments are provided, build all projects.
 if [ "$#" -eq 0 ]; then
-    indices=(1 2 3 4 5 6 7 8)
+    indices=(1 2 3 4 5 6 7 8 9 10)
 else
     indices=("$@")
 fi
