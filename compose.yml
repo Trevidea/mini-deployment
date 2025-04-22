@@ -12,7 +12,8 @@ services:
         target: /etc/nginx/user_conf.d/nginx-sp-mini.conf
     volumes:
       - ome-conf:/opt/ovenmediaengine/bin/conf
-      - nginx_secrets:/etc/letsencrypt
+      - nginx_secrets:/etc/letsencryptvolumes
+      - ome-media:/usr/share/nginx/html/hls:ro
     networks:
       - public
       - private
@@ -120,18 +121,18 @@ services:
       - private
 
   # ✅ Llhls Server (Linux Deployment)
-  llhls-server:
-    image: drakesoftware/llhls-server-arm64:latest
-    container_name: llhls-server-linux
-    # ports:
-    #   - "59919:59919"
-    restart: unless-stopped
-    volumes:
-      - ome-media:/usr/share/nginx/html/hls
-    networks:
-      - private
-    depends_on:
-      - ovenmediaengine
+  # llhls-server:
+  #   image: drakesoftware/llhls-server-arm64:latest
+  #   container_name: llhls-server-linux
+  #   # ports:
+  #   #   - "59919:59919"
+  #   restart: unless-stopped
+  #   volumes:
+  #     - ome-media:/usr/share/nginx/html/hls
+  #   networks:
+  #     - private
+  #   depends_on:
+  #     - ovenmediaengine
 
   # ✅ SP-COACH-APP (Linux Deployment)
   sp-coach-app:
