@@ -3,7 +3,7 @@ set -e
 
 # Define arrays with Docker image tags and descriptive names
 images[1]="drakesoftware/full-stack-ui-arm64:latest"
-images[2]="drakesoftware/llhls-server-arm64:latest"
+# images[2]="drakesoftware/llhls-server-arm64:latest"
 images[3]="drakesoftware/ome-arm64:latest"
 images[4]="drakesoftware/relay-server-arm64:latest"
 images[5]="drakesoftware/service-gateway-arm64:latest"
@@ -14,7 +14,7 @@ images[9]="drakesoftware/airflow-arm64:latest"
 images[10]="drakesoftware/keycloak-arm64:latest"
 
 names[1]="full-stack service"
-names[2]="llhls-server service"
+# names[2]="llhls-server service"
 names[3]="ome service"
 names[4]="relay-server service"
 names[5]="service-gateway service"
@@ -26,7 +26,7 @@ names[10]="keycloak service"
 
 # Determine which indices to use: all if no arguments, or only the ones provided.
 if [ "$#" -eq 0 ]; then
-    indices=(1 2 3 4 5 6 7 8 9 10)
+    indices=(1 3 4 5 6 7 8 9 10)
 else
     indices=("$@")
 fi

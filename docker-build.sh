@@ -3,7 +3,7 @@ set -e
 
 # Define an array with project directories indexed starting from 1.
 projects[1]="full-stack"
-projects[2]="llhls-server"
+# projects[2]="llhls-server"
 projects[3]="ome"
 projects[4]="relay-server"
 projects[5]="service-gateway"
@@ -15,7 +15,7 @@ projects[10]="keycloak"
 
 # If no arguments are provided, build all projects.
 if [ "$#" -eq 0 ]; then
-    indices=(1 2 3 4 5 6 7 8 9 10)
+    indices=(1 3 4 5 6 7 8 9 10)
 else
     indices=("$@")
 fi
