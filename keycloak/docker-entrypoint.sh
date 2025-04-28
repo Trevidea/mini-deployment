@@ -1,7 +1,7 @@
 #!/bin/bash
-# docker-entrypoint.sh - Custom entrypoint for Keycloak
+set -e
 
-# Add any initialization steps here if needed (e.g., custom configurations)
+# You can put pre-start configuration here if you want
 
-# Run the original Keycloak entrypoint
-exec /opt/keycloak/bin/kc start-dev
+# Finally start Keycloak
+exec /opt/keycloak/bin/kc.sh "$@"
