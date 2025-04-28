@@ -77,11 +77,11 @@ services:
   # ✅ OvenMediaEngine (OME) Streaming Server
   ovenmediaengine:
     image: drakesoftware/ome-arm64:latest
-    ports:
-      - "8081:8081"
-      - "1935:1935"
-      - "3333:3333"
-      - "3334:3334"
+    # ports:
+    #   - "8081:8081"
+    #   - "1935:1935"
+    #   - "3333:3333"
+    #   - "3334:3334"
     volumes:
       - ome-media:/opt/ovenmediaengine/bin/dumps
       - ome-conf:/opt/ovenmediaengine/bin/conf
