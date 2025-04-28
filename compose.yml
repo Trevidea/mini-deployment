@@ -156,35 +156,35 @@ services:
       - private
 
   # ✅ Airflow for Mac
-  airflow:
-    image: drakesoftware/airflow-arm64:latest # Use your custom-built image tag
-    container_name: airflow
-    command: ["airflow", "webserver"]
-    ports:
-      - "8089:8080" # Airflow UI exposed on port 8089
-    volumes:
-      - airflow_logs:/opt/airflow/logs
-    environment:
-      AIRFLOW__CORE__EXECUTOR: SequentialExecutor
-      AIRFLOW__CORE__LOAD_EXAMPLES: "false"
-      AIRFLOW__CORE__FERNET_KEY: ""
-      AIRFLOW__CORE__DAGS_ARE_PAUSED_AT_CREATION: "true"
-    restart: unless-stopped
-    networks:
-      - private
+  # airflow:
+  #   image: drakesoftware/airflow-arm64:latest # Use your custom-built image tag
+  #   container_name: airflow
+  #   command: ["airflow", "webserver"]
+  #   ports:
+  #     - "8089:8080" # Airflow UI exposed on port 8089
+  #   volumes:
+  #     - airflow_logs:/opt/airflow/logs
+  #   environment:
+  #     AIRFLOW__CORE__EXECUTOR: SequentialExecutor
+  #     AIRFLOW__CORE__LOAD_EXAMPLES: "false"
+  #     AIRFLOW__CORE__FERNET_KEY: ""
+  #     AIRFLOW__CORE__DAGS_ARE_PAUSED_AT_CREATION: "true"
+  #   restart: unless-stopped
+  #   networks:
+  #     - private
 
   # ✅ Keycloak Service (Basic - H2 DB)
-  keycloak:
-    image: drakesoftware/keycloak-arm64:latest
-    container_name: keycloak
-    ports:
-      - "8090:8080"  # Keycloak UI will be available on http://localhost:8080
-    environment:
-      KEYCLOAK_ADMIN: admin
-      KEYCLOAK_ADMIN_PASSWORD: admin
-    restart: unless-stopped
-    networks:
-      - private
+  # keycloak:
+  #   image: drakesoftware/keycloak-arm64:latest
+  #   container_name: keycloak
+  #   ports:
+  #     - "8090:8080"  # Keycloak UI will be available on http://localhost:8080
+  #   environment:
+  #     KEYCLOAK_ADMIN: admin
+  #     KEYCLOAK_ADMIN_PASSWORD: admin
+  #   restart: unless-stopped
+  #   networks:
+  #     - private
 
 configs:
   nginx_sp_mini_config: 
