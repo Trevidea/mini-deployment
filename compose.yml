@@ -214,7 +214,7 @@ volumes:
   relay-server-logs:
     driver: local
   ome-media:
-    driver: 
+    driver: local
   airflow_logs:
     driver: local
 
