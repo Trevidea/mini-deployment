@@ -155,8 +155,6 @@ services:
     networks:
       - private
 
-
-
   # ✅ Airflow for Mac
   airflow:
     image: drakesoftware/airflow-arm64:latest # Use your custom-built image tag
@@ -188,10 +186,10 @@ services:
     networks:
       - private
 
-
 configs:
   nginx_sp_mini_config: 
     file: ./nginx-sp-mini.conf
+
 secrets:
   pg_user:
     file: ./pg_user.txt
