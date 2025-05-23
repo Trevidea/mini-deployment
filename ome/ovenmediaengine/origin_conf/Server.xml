@@ -89,6 +89,10 @@
                 </Providers>
 
                 <Publishers>
+                        <Thumbnail>
+                                <Port>20080</Port>
+                                <TLSPort>10081</TLSPort>
+                        </Thumbnail>
                         <!-- The OVT is protocol for ORIGIN-EDGE -->
                         <OVT>
                                 <Port>${env:OME_ORIGIN_PORT:9000}</Port>
@@ -258,6 +262,12 @@
                                                                         <Name>bypass_video</Name>
                                                                         <Bypass>true</Bypass>
                                                                 </Video>
+                                                                <Image>
+                                                                        <Codec>jpeg</Codec>
+                                                                        <Framerate>1</Framerate>
+                                                                        <Width>227</Width>
+                                                                        <Height>110</Height>
+                                                                </Image>
                                                                 <Audio>
                                                                         <Name>aac_audio</Name>
                                                                         <Codec>aac</Codec>
@@ -362,6 +372,11 @@
                                                                 <Url>*</Url>
 							</CrossDomains>
                                                 </LLHLS>
+                                                <Thumbnail>
+                                                        <crossDomians>
+                                                                <Url>*</Url>
+                                                        </CrossDomains>
+                                                </Thumbnail>
                                         </Publishers>
                                 </Application>
                         </Applications>
