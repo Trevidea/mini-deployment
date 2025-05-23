@@ -14,6 +14,7 @@ services:
       - ome-conf:/opt/ovenmediaengine/bin/conf
       - nginx_secrets:/etc/letsencrypt:ro
       - ome-media:/usr/share/nginx/html/hls:ro
+      - sp-coach-assets:/app/thumbnails
     networks:
       - public
       - private
@@ -82,6 +83,7 @@ services:
       - "1935:1935"
     #   - "3333:3333"
     #   - "3334:3334"
+      - "20080:20080"
     volumes:
       - ome-media:/opt/ovenmediaengine/bin/dumps
       - ome-conf:/opt/ovenmediaengine/bin/conf
@@ -129,6 +131,7 @@ services:
       - "4300:4300" # Map container's port 80 to host's port 4300
     volumes:
       - coach_app_config:/etc/nginx/conf.d:ro
+      - sp-coach-assets:/usr/share/nginx/html/assets/thumbnails
     environment:
       API_URL: "https://api.example.com"
       CP_SERVER_BASE_URL: "https://${API_HOST_NAME}/api"
@@ -197,6 +200,7 @@ secrets:
     file: ./pg_password.txt
 
 volumes:
+  sp-coach-assets:
   ome-conf:
   nginx_secrets:
   service-gateway:
