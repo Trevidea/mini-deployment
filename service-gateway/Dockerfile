@@ -1,7 +1,5 @@
 # --- Builder Stage ---
 FROM ubuntu:latest AS builder
-
-# Disable interactive dialogue
 ENV DEBIAN_FRONTEND=noninteractive
 
 # Install necessary build tools and dependencies
@@ -21,19 +19,32 @@ RUN apt-get update && apt-get install -y \
 # Set working directory
 WORKDIR /app
 
-# Copy the entire service-gateway project into the container
+
+# Copy only the CMake-deps project and stamp Makefiles
+COPY dependencies_cmake/ dependencies_cmake/
+COPY dependencies_duckdb/ dependencies_duckdb/
+COPY Makefile.cppzmq Makefile.spdlog Makefile.fmt Makefile.duckdb Makefile.jsoncpp \
+    Makefile.cpr Makefile.httplib Makefile.libzmq Makefile.pqxx Makefile.gtest ./
+
+# Build third-party dependencies (cached unless stamp files change)
+RUN mkdir build-deps && cd build-deps \
+    && cmake ../dependencies_cmake -DCMAKE_BUILD_TYPE=Release \
+    && cmake --build . --target third_party_deps -j$(nproc)
+
+# --- Builder Stage: build the application ---
+# Copy the rest of the application source
 COPY . .
 
-# CMD ["/bin/sh"]
-# Build the project (this will run your CMake configuration, which builds the external dependencies using your stamp mechanism)
-# RUN rm -rf build && mkdir build && cd build &&  cmake .. -DCMAKE_BUILD_TYPE=Release &&  cmake --build . -j$(nproc)
-RUN cmake -DCMAKE_BUILD_TYPE:STRING=Debug -DCMAKE_EXPORT_COMPILE_COMMANDS:BOOL=TRUE --no-warn-unused-cli -S./ -B./build
-RUN cmake --build ./build --config Debug --target all -j 10 --
-    
+# Configure and build only the capture-server target
+RUN mkdir build && cd build \
+    && cmake .. -DCMAKE_BUILD_TYPE=Release \
+    && cmake --build . --target capture-server -j$(nproc)
+
 # --- Runtime Stage ---
 FROM ubuntu:latest AS runtime
+ENV DEBIAN_FRONTEND=noninteractive
 
-# Install minimal runtime libraries (e.g., standard C++ runtime)
+# Install minimal runtime libraries
 RUN apt-get update && apt-get install -y --no-install-recommends \
     libstdc++6 \
     libpq5 \
@@ -42,18 +53,17 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
 
 WORKDIR /app
 
-# Copy the built service-gateway binary from the builder stage
+# Copy the built binary
 COPY --from=builder /app/build/api/capture-server /usr/local/bin/capture-server
 
-# Copy the external dependencies (shared libraries) from third_party_install
+# Copy all third-party shared libraries
 COPY --from=builder /app/third_party_install /usr/local/third_party_install
 
-# Update the runtime library search path so that your binary finds the required shared libraries.
-# Adjust the paths below to include the lib directories for the dependencies that produce shared libraries.
-ENV LD_LIBRARY_PATH="/usr/local/third_party_install/libzmq/lib:/usr/local/third_party_install/duckdb:/usr/local/third_party_install/spdlog/lib:/usr/local/third_party_install/fmt/lib:/usr/local/third_party_install/jsoncpp/lib:/usr/local/third_party_install/cpr/lib:${LD_LIBRARY_PATH}"
+# Set library path for runtime dependencies
+ENV LD_LIBRARY_PATH="/usr/local/third_party_install/spdlog/lib:/usr/local/third_party_install/fmt/lib:/usr/local/third_party_install/duckdb:/usr/local/third_party_install/jsoncpp/lib:/usr/local/third_party_install/cpr/lib:/usr/local/third_party_install/libzmq/lib:/usr/local/third_party_install/pqxx/lib:${LD_LIBRARY_PATH}"
 
-# Expose the port your service uses (adjust if necessary)
+# Expose service port
 EXPOSE 1437
 
-# Set the default command to run your service
+# Default entrypoint
 CMD ["/usr/local/bin/capture-server"]
