@@ -47,8 +47,8 @@ services:
   service-gateway:
     image: drakesoftware/service-gateway-arm64:latest
     container_name: service-gateway
-    # ports:
-    #   - "1437:1437"
+    ports:
+      - "1437:1437"
     volumes:
       - ome-media:/app/dumps
       - service-gateway:/app/logs
@@ -79,10 +79,10 @@ services:
   ovenmediaengine:
     image: drakesoftware/ome-arm64:latest
     ports:
-    #   - "8081:8081"
+      - "8081:8081"
       - "1935:1935"
-    #   - "3333:3333"
-    #   - "3334:3334"
+      - "3333:3333"
+      - "3334:3334"
       - "20080:20080"
     volumes:
       - ome-media:/opt/ovenmediaengine/bin/dumps
@@ -97,9 +97,9 @@ services:
   relay-server:
     image: drakesoftware/relay-server-arm64:latest
     container_name: relay-server
-    # ports:
-    #   - "3001:3001"
-    #   - "4001:4001"
+    ports:
+      - "3001:3001"
+      - "4001:4001"
     volumes:
       - relay-config:/etc/relay-server
       - relay-server-logs:/var/log/relay-server
