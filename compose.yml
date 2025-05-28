@@ -159,7 +159,7 @@ services:
       - private
 
   thumbnail-service:
-    image: thumbsvc:pyffmpeg
+    image: drakesoftware/thumbnail-arm64:latest
     container_name: thumbnail-service
     volumes:
       - sp-coach-assets:/data
