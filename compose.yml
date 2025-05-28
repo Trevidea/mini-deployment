@@ -158,6 +158,17 @@ services:
     networks:
       - private
 
+  thumbnail-service:
+    image: thumbsvc:pyffmpeg
+    container_name: thumbnail-service
+    volumes:
+      - sp-coach-assets:/data
+    ports:
+      - "5000:5000"
+    networks:
+      - private
+    restart: unless-stopped
+
   # ✅ Airflow for Mac
   # airflow:
   #   image: drakesoftware/airflow-arm64:latest # Use your custom-built image tag

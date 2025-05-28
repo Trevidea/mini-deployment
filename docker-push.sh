@@ -12,6 +12,7 @@ images[7]="drakesoftware/sp-db-arm64:latest"
 images[8]="drakesoftware/tagging-app-arm64:latest"
 images[9]="drakesoftware/airflow-arm64:latest"
 images[10]="drakesoftware/keycloak-arm64:latest"
+images[11]="drakesoftware/thumbnail-arm64:latest"
 
 names[1]="full-stack service"
 # names[2]="llhls-server service"
@@ -23,10 +24,11 @@ names[7]="sp-db service"
 names[8]="tagging-app service"
 names[9]="airflow service"
 names[10]="keycloak service"
+names[11]="thumbnail-service"
 
 # Determine which indices to use: all if no arguments, or only the ones provided.
 if [ "$#" -eq 0 ]; then
-    indices=(1 3 4 5 6 7 8 9 10)
+    indices=(1 3 4 5 6 7 8 11)
 else
     indices=("$@")
 fi
