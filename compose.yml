@@ -53,6 +53,7 @@ services:
       - ome-media:/app/dumps
       - service-gateway:/app/logs
       - /etc/localtime:/etc/localtime:ro
+      - sp-coach-assets:/app/thumbnails
     environment:
       # TZ: Asia/Kolkata
       # TZ: America/New_York
@@ -60,7 +61,11 @@ services:
       PG_DBS: half-stack
       PG_USER_FILE: /run/secrets/pg_user
       PG_PASSWORD_FILE: /run/secrets/pg_password
+      PG_USR: drake_8283
+      PG_PWD: sportpip
       PG_PORT: 5432
+      OM_THUMBNAILS: /app/thumbnails
+      OM_INTERNAL_HOST_NAME: ovenmediaengine
       OM_URL: http://ovenmediaengine:8081/v1
       OM_HOST_NAME: ${OM_HOST_NAME}
       OM_CTRL_SVR: http://service-gateway:1437
@@ -211,7 +216,6 @@ secrets:
     file: ./pg_password.txt
 
 volumes:
-  sp-coach-assets:
   ome-conf:
   nginx_secrets:
   service-gateway:
@@ -229,6 +233,8 @@ volumes:
   relay-server-logs:
     driver: local
   ome-media:
+    driver: local
+  sp-coach-assets:
     driver: local
   airflow_logs:
     driver: local
