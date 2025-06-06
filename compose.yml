@@ -164,7 +164,7 @@ services:
     volumes:
       - sp-coach-assets:/data
     ports:
-      - "5000:5000"
+      - "4800:4800"
     networks:
       - private
     restart: unless-stopped
