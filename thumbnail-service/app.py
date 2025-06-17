@@ -17,10 +17,14 @@ def thumbnail():
 
     output_path = os.path.join(DATA_DIR, filename)
     cmd = [
-        'ffmpeg','-y',
+        'ffmpeg',
+        '-hide_banner', '-loglevel', 'info',
+        '-analyzeduration', '1M', '-probesize', '32',
         '-i', url,
         '-ss', str(timestamp),
-        '-vframes', '1',
+        '-frames:v', '1',
+        '-vf', 'scale=227:110',
+        '-update', '1',
         '-q:v', '2',
         output_path
     ]
