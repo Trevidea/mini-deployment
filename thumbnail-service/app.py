@@ -2,7 +2,7 @@ from flask import Flask, request, jsonify
 import subprocess, os
 
 app = Flask(__name__)
-DATA_DIR = '/data'
+DATA_DIR = '/data/thumbnails'
 os.makedirs(DATA_DIR, exist_ok=True)
 
 @app.route('/thumbnail', methods=['POST', 'GET'])

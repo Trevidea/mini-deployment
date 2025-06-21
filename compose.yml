@@ -52,7 +52,7 @@ services:
       - ome-media:/app/dumps
       - service-gateway:/app/logs
       - /etc/localtime:/etc/localtime:ro
-      - sp-blob-assets:/app/thumbnails
+      - sp-blob-assets:/app/assets
     environment:
       # TZ: Asia/Kolkata
       # TZ: America/New_York
@@ -63,12 +63,13 @@ services:
       PG_USR: drake_8283
       PG_PWD: sportpip
       PG_PORT: 5432
-      OM_THUMBNAILS: /app/thumbnails
+      OM_THUMBNAILS: /app/assets/thumbnails
       OM_INTERNAL_HOST_NAME: ovenmediaengine
       OM_URL: http://ovenmediaengine:8081/v1
       OM_HOST_NAME: ${OM_HOST_NAME}
       OM_CTRL_SVR: http://service-gateway:1437
       OM_DUMPS: /app/dumps
+      BLOBS: /app/assets
     secrets:
       - pg_user
       - pg_password
