@@ -14,7 +14,7 @@ services:
       - ome-conf:/opt/ovenmediaengine/bin/conf
       - nginx_secrets:/etc/letsencrypt:ro
       - ome-media:/usr/share/nginx/html/hls:ro
-      - sp-coach-assets:/app/thumbnails
+      - sp-blob-assets:/app/thumbnails
     networks:
       - public
       - private
@@ -30,12 +30,11 @@ services:
     # ports:
     #   - "4400:4400"
     environment:
-      API_URL: "https://api.example.com"
-      CP_SERVER_BASE_URL: "https://${API_HOST_NAME}/api"
-      HLS_URL: "https://${HLS_HOST_NAME}"
-      SP_RELAY_URL: "https://${RELAY_HOST_NAME}"
-      RTMP_URL: "rtmp://${RTMP_HOST_NAME}"
-      PLAYER_URL: "https://${PLAYER_HOST_NAME}"
+      CP_SERVER_BASE_URL: "${API_HOST_NAME}/api"
+      HLS_URL: "${HLS_HOST_NAME}"
+      SP_RELAY_URL: "${RELAY_HOST_NAME}"
+      RTMP_URL: "${RTMP_HOST_NAME}"
+      PLAYER_URL: "${PLAYER_HOST_NAME}"
     volumes:
       - angular_app_config:/etc/nginx/conf.d:ro
     restart: always
@@ -53,7 +52,7 @@ services:
       - ome-media:/app/dumps
       - service-gateway:/app/logs
       - /etc/localtime:/etc/localtime:ro
-      - sp-coach-assets:/app/thumbnails
+      - sp-blob-assets:/app/thumbnails
     environment:
       # TZ: Asia/Kolkata
       # TZ: America/New_York
@@ -136,15 +135,14 @@ services:
       - "4300:4300" # Map container's port 80 to host's port 4300
     volumes:
       - coach_app_config:/etc/nginx/conf.d:ro
-      - sp-coach-assets:/usr/share/nginx/html/assets/thumbnails
+      - sp-blob-assets:/usr/share/nginx/html/assets/thumbnails
     environment:
-      API_URL: "https://api.example.com"
-      CP_SERVER_BASE_URL: "https://${API_HOST_NAME}/api"
-      HLS_URL: "https://${HLS_HOST_NAME}"
-      SP_RELAY_URL: "https://${RELAY_HOST_NAME}"
-      RTMP_URL: "rtmp://${RTMP_HOST_NAME}"
-      PLAYER_URL: "https://${PLAYER_HOST_NAME}"
-      THUMBNAIL_HOST: "http://${COACH_APP_HOST}"
+      CP_SERVER_BASE_URL: "${API_HOST_NAME}/api"
+      HLS_URL: "${HLS_HOST_NAME}"
+      SP_RELAY_URL: "${RELAY_HOST_NAME}"
+      RTMP_URL: "${RTMP_HOST_NAME}"
+      PLAYER_URL: "${PLAYER_HOST_NAME}"
+      THUMBNAIL_HOST: "${COACH_APP_HOST}"
     restart: always
     networks:
       - private
@@ -168,7 +166,7 @@ services:
     image: drakesoftware/thumbnail-arm64:latest
     container_name: thumbnail-service
     volumes:
-      - sp-coach-assets:/data
+      - sp-blob-assets:/data
     ports:
       - "4800:5000"
     networks:
@@ -235,7 +233,7 @@ volumes:
     driver: local
   ome-media:
     driver: local
-  sp-coach-assets:
+  sp-blob-assets:
     driver: local
   airflow_logs:
     driver: local
